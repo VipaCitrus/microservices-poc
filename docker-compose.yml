@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  # ========== USER SERVICE DATABASE ==========
+  mysql-user:
+    image: mysql:8.0
+    container_name: mysql-user-container
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_USER_DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_USER_DB_NAME}
+    ports:
+      - "3307:3306"
+    networks:
+      - poc-network
+
+  # ========== ORDER SERVICE DATABASE ==========
+  mysql-order:
+    image: mysql:8.0
+    container_name: mysql-order-container
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ORDER_DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_ORDER_DB_NAME}
+    ports:
+      - "3308:3306"
+    networks:
+      - poc-network
+
+  # ========== USER SERVICE ==========
+  user-service:
+    build: ./user-service
+    container_name: user-service-container
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-user-container:3306/${MYSQL_USER_DB_NAME}?useSSL=false&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_USER_DB_ROOT_PASSWORD}
+    depends_on:
+      - mysql-user
+    networks:
+      - poc-network
+
+  # ========== ORDER SERVICE ==========
+  order-service:
+    build: ./order-service
+    container_name: order-service-container
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-order-container:3306/${MYSQL_ORDER_DB_NAME}?useSSL=false&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_ORDER_DB_ROOT_PASSWORD}
+    depends_on:
+      - mysql-order
+    networks:
+      - poc-network
+
+networks:
+  poc-network:
+    driver: bridge

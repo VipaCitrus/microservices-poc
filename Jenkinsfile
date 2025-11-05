@@ -11,7 +11,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'dev', credentialsId: "${GITHUB_CREDENTIALS}", url: 'https://github.com/<your-username>/<your-repo>.git'
+                git branch: 'dev', credentialsId: "${GITHUB_CREDENTIALS}", url: 'https://github.com/VipaCitrus/microservices-poc.git'
             }
         }
 

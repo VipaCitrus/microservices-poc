@@ -15,6 +15,17 @@ pipeline {
             }
         }
 
+        stage('Build JARs') {
+            steps {
+                dir('user-service') {
+                    bat 'mvn clean package -DskipTests'
+                }
+                dir('order-service') {
+                    bat 'mvn clean package -DskipTests'
+                }
+            }
+        }
+
         stage('Build Docker Images') {
             steps {
                 bat 'docker build -t %USER_IMAGE%:latest ./user-service'

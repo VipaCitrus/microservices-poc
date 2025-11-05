@@ -15,6 +15,13 @@ pipeline {
             }
         }
 
+        stage('Hello') {
+            steps {
+                echo 'This stage works!'
+            }
+        }
+
+
         stage('Build JARs') {
             steps {
                 dir('user-service') {

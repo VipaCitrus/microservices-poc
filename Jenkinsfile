@@ -4,20 +4,14 @@ pipeline {
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-creds')
         GITHUB_CREDENTIALS = credentials('github-creds')
-        USER_IMAGE = "vipashynasharma/user-service"
-        ORDER_IMAGE = "vipashynasharma/order-service"
+        USER_IMAGE = "vipashyna07654/user-service"
+        ORDER_IMAGE = "vipashyna07654/order-service"
     }
 
     stages {
         stage('Checkout') {
             steps {
                 git branch: 'dev', credentialsId: 'github-creds', url: 'https://github.com/VipaCitrus/microservices-poc.git'
-            }
-        }
-
-        stage('Hello') {
-            steps {
-                echo 'This stage works!'
             }
         }
 
